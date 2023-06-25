@@ -13,6 +13,7 @@ MicroPython Driver for the ST LIS2MDL Magnetometer sensor
 
 """
 
+from collections import namedtuple
 from micropython import const
 from micropython_lis2mdl.i2c_helpers import CBits, RegisterStruct
 
@@ -25,10 +26,14 @@ except ImportError:
 __version__ = "0.0.0+auto.0"
 __repo__ = "https://github.com/jposada202020/MicroPython_LIS2MDL.git"
 
-
+INT_THS_L_REG = 0x65
 _REG_WHO_AM_I = const(0x4F)
 _CFG_REG_A = const(0x60)
 _CFG_REG_B = const(0x61)
+_CFG_REG_C = const(0x62)
+_INT_CRTL_REG = const(0x63)
+_INT_SOURCE_REG = const(0x64)
+_INT_THS = const(0x65)
 _DATA = const(0x68)
 
 _GAUSS_TO_UT = 0.15
@@ -51,6 +56,13 @@ low_power_mode_values = (LP_DISABLED, LP_ENABLED)
 LPF_DISABLED = const(0b0)
 LPF_ENABLED = const(0b1)
 low_pass_filter_mode_values = (LPF_DISABLED, LPF_ENABLED)
+
+INT_DISABLED = const(0b0)
+INT_ENABLED = const(0b1)
+interrupt_mode_values = (INT_DISABLED, INT_ENABLED)
+
+
+AlertStatus = namedtuple("AlertStatus", ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"])
 
 class LIS2MDL:
     """Driver for the LIS2MDL Sensor connected over I2C.
@@ -94,7 +106,24 @@ class LIS2MDL:
 
     _low_pass_filter_mode = CBits(1, _CFG_REG_B, 0)
 
+    _xyz_interrupt_enable = CBits(3, _INT_CRTL_REG, 5)
+    _int_reg_polarity = CBits(1, _INT_CRTL_REG, 2)
+    _int_latched = CBits(1, _INT_CRTL_REG, 1)
+    _interrupt_mode = CBits(1, _INT_CRTL_REG, 0)
+    _interrupt_pin_inversed = CBits(1, _CFG_REG_C, 6)
+    information_about_interrup = RegisterStruct(_INT_CRTL_REG, "B")
+
+    _x_high = CBits(1, _INT_SOURCE_REG, 7)
+    _y_high = CBits(1, _INT_SOURCE_REG, 6)
+    _z_high = CBits(1, _INT_SOURCE_REG, 5)
+    _x_low = CBits(1, _INT_SOURCE_REG, 4)
+    _y_low = CBits(1, _INT_SOURCE_REG, 3)
+    _z_low = CBits(1, _INT_SOURCE_REG, 2)
+    _interrupt_triggered = CBits(1, _INT_SOURCE_REG, 0)
+    need = RegisterStruct(_INT_SOURCE_REG, "B")
+
     _raw_magnetic_data = RegisterStruct(_DATA, "<hhh")
+    _interrupt_threshold = RegisterStruct(INT_THS_L_REG, "<h")
 
     def __init__(self, i2c, address: int = 0x1E) -> None:
         self._i2c = i2c
@@ -104,6 +133,10 @@ class LIS2MDL:
             raise RuntimeError("Failed to find LIS2MDL")
 
         self._operation_mode = CONTINUOUS
+        self._int_latched = True
+        self._int_reg_polarity = True
+        self._interrupt_pin_inversed = True
+
 
     @property
     def operation_mode(self) -> str:
@@ -221,3 +254,58 @@ class LIS2MDL:
         if value not in low_pass_filter_mode_values:
             raise ValueError("Value must be a valid low_pass_filter_mode setting")
         self._low_pass_filter_mode = value
+
+    @property
+    def interrupt_mode(self) -> str:
+        """
+        Sensor interrupt_mode
+
+        +----------------------------------+-----------------+
+        | Mode                             | Value           |
+        +==================================+=================+
+        | :py:const:`lis2mdl.INT_DISABLED` | :py:const:`0b0` |
+        +----------------------------------+-----------------+
+        | :py:const:`lis2mdl.INT_ENABLED`  | :py:const:`0b1` |
+        +----------------------------------+-----------------+
+        """
+        values = ("INT_DISABLED", "INT_ENABLED")
+        return values[self._interrupt_mode]
+
+    @interrupt_mode.setter
+    def interrupt_mode(self, value: int) -> None:
+        if value not in interrupt_mode_values:
+            raise ValueError("Value must be a valid interrupt_mode setting")
+        self._interrupt_mode = value
+        if value:
+            self._xyz_interrupt_enable = 0b111
+        else:
+            self._xyz_interrupt_enable = 0
+
+    @property
+    def interrupt_threshold(self) -> float:
+        """The threshold (in microteslas) for magnetometer interrupt generation. Given value is
+        compared against all axes in both the positive and negative direction"""
+        return self._interrupt_threshold * _GAUSS_TO_UT
+
+    @interrupt_threshold.setter
+    def interrupt_threshold(self, value: float) -> None:
+        if value < 0:
+            value = -value
+        self._interrupt_threshold = int(value / _GAUSS_TO_UT)
+
+    @property
+    def interrupt_triggered(self):
+        return self._interrupt_triggered
+
+    @property
+    def alert_status(self):
+        """
+        Alert Status for interrupts
+        """
+
+        return AlertStatus(x_high=self._x_high,
+                           x_low=self._x_low,
+                           y_high=self._y_high,
+                           y_low=self._y_low,
+                           z_high=self._z_high,
+                           z_low=self._z_low)

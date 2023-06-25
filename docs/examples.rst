@@ -42,3 +42,12 @@ Example showing the Low pass filter mode setting
 .. literalinclude:: ../examples/lis2mdl_low_pass_filter_mode.py
     :caption: examples/lis2mdl_low_pass_filter_mode.py
     :lines: 5-
+
+Interrupt mode settings
+------------------------
+
+Example showing the Interrupt mode setting
+
+.. literalinclude:: ../examples/lis2mdl_interrupt_mode.py
+    :caption: examples/lis2mdl_interrupt_mode.py
+    :lines: 5-
