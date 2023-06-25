@@ -23,4 +23,3 @@ while True:
         if alert_status.x_low:
             print("X axes below low set limit!")
     time.sleep(0.5)
-

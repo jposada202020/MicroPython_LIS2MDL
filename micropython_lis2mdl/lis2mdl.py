@@ -13,6 +13,7 @@ MicroPython Driver for the ST LIS2MDL Magnetometer sensor
 
 """
 
+import time
 from collections import namedtuple
 from micropython import const
 from micropython_lis2mdl.i2c_helpers import CBits, RegisterStruct
@@ -62,7 +63,10 @@ INT_ENABLED = const(0b1)
 interrupt_mode_values = (INT_DISABLED, INT_ENABLED)
 
 
-AlertStatus = namedtuple("AlertStatus", ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"])
+AlertStatus = namedtuple(
+    "AlertStatus", ["x_high", "x_low", "y_high", "y_low", "z_high", "z_low"]
+)
+
 
 class LIS2MDL:
     """Driver for the LIS2MDL Sensor connected over I2C.
@@ -136,7 +140,6 @@ class LIS2MDL:
         self._int_latched = True
         self._int_reg_polarity = True
         self._interrupt_pin_inversed = True
-
 
     @property
     def operation_mode(self) -> str:
@@ -295,6 +298,9 @@ class LIS2MDL:
 
     @property
     def interrupt_triggered(self):
+        """
+        Retturn True when an interrupt is triggered
+        """
         return self._interrupt_triggered
 
     @property
@@ -303,9 +309,11 @@ class LIS2MDL:
         Alert Status for interrupts
         """
 
-        return AlertStatus(x_high=self._x_high,
-                           x_low=self._x_low,
-                           y_high=self._y_high,
-                           y_low=self._y_low,
-                           z_high=self._z_high,
-                           z_low=self._z_low)
+        return AlertStatus(
+            x_high=self._x_high,
+            x_low=self._x_low,
+            y_high=self._y_high,
+            y_low=self._y_low,
+            z_high=self._z_high,
+            z_low=self._z_low,
+        )
