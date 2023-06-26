@@ -1,0 +1,11 @@
+{
+  "urls": [
+    ["micropython_lis2mdl/examples/lis2mdl_data_rate.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_data_rate.py"],
+    ["micropython_lis2mdl/examples/lis2mdl_simpletest.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_simpletest.py"],
+    ["micropython_lis2mdl/examples/lis2mdl_low_power_mode.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_low_power_mode.py"],
+    ["micropython_lis2mdl/examples/lis2mdl_operation_mode.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_operation_mode.py"],
+    ["micropython_lis2mdl/examples/lis2mdl_low_pass_filter_mode.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_low_pass_filter_mode.py"],
+    ["micropython_lis2mdl/examples/lis2mdl_interrupt_mode.py", "github:jposada202020/MicroPython_LIS2MDL/examples/lis2mdl_interrupt_mode.py"]
+  ],
+  "version": "0.1"
+}

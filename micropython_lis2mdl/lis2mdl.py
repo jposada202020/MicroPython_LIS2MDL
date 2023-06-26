@@ -299,7 +299,7 @@ class LIS2MDL:
     @property
     def interrupt_triggered(self):
         """
-        Retturn True when an interrupt is triggered
+        Return True when an interrupt is triggered
         """
         return self._interrupt_triggered
 
