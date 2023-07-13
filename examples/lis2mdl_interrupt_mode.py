@@ -13,8 +13,8 @@ lis.interrupt_threshold = 80
 lis.interrupt_mode = lis2mdl.INT_ENABLED
 
 while True:
-    magx, magy, magz = lis.magnetic
-    print("x:{:.2f}uT, y:{:.2f}uT, z:{:.2f}uT".format(magx, magy, magz))
+    mag_x, mag_y, mag_z = lis.magnetic
+    print(f"X:{mag_x:.2f}, Y:{mag_y:.2f}, Z:{mag_z:.2f} uT")
     print()
     if lis.interrupt_triggered:
         alert_status = lis.alert_status

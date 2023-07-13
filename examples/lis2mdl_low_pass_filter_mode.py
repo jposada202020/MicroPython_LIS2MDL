@@ -15,8 +15,8 @@ while True:
     for low_pass_filter_mode in lis2mdl.low_pass_filter_mode_values:
         print("Current Low pass filter mode setting: ", lis.low_pass_filter_mode)
         for _ in range(10):
-            magx, magy, magz = lis.magnetic
-            print("x:{:.2f}uT, y:{:.2f}uT, z:{:.2f}uT".format(magx, magy, magz))
+            mag_x, mag_y, mag_z = lis.magnetic
+            print(f"X:{mag_x:.2f}, Y:{mag_y:.2f}, Z:{mag_z:.2f} uT")
             print()
             time.sleep(0.5)
         lis.low_pass_filter_mode = low_pass_filter_mode

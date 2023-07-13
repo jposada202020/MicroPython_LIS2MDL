@@ -21,9 +21,6 @@ urls = {Homepage = "https://github.com/jposada202020/MicroPython_LIS2MDL"}
 keywords = [
     "sensor",
     "micropython",
-    "lis2mdl",
-    "micropython",
-    "sensor",
     "driver",
     "lis2mdl",
     "st",

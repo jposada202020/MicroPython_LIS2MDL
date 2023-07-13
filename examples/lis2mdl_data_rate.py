@@ -15,8 +15,8 @@ while True:
     for data_rate in lis2mdl.data_rate_values:
         print("Current Data rate setting: ", lis.data_rate)
         for _ in range(10):
-            magx, magy, magz = lis.magnetic
-            print("x:{:.2f}uT, y:{:.2f}uT, z:{:.2f}uT".format(magx, magy, magz))
+            mag_x, mag_y, mag_z = lis.magnetic
+            print(f"X:{mag_x:.2f}, Y:{mag_y:.2f}, Z:{mag_z:.2f} uT")
             print()
             time.sleep(0.5)
         lis.data_rate = data_rate

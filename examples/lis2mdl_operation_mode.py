@@ -15,8 +15,8 @@ while True:
     for operation_mode in lis2mdl.operation_mode_values:
         print("Current Operation mode setting: ", lis.operation_mode)
         for _ in range(10):
-            magx, magy, magz = lis.magnetic
-            print("x:{:.2f}uT, y:{:.2f}uT, z:{:.2f}uT".format(magx, magy, magz))
+            mag_x, mag_y, mag_z = lis.magnetic
+            print(f"X:{mag_x:.2f}, Y:{mag_y:.2f}, Z:{mag_z:.2f} uT")
             print()
             time.sleep(0.5)
         lis.operation_mode = operation_mode
