@@ -134,7 +134,7 @@ class LIS2MDL:
         self._address = address
 
         if self._device_id != 0x40:
-            raise RuntimeError("Failed to find LIS2MDL")
+            raise RuntimeError("Failed to find the LIS2MDL sensor")
 
         self._operation_mode = CONTINUOUS
         self._int_latched = True

@@ -12,5 +12,5 @@ lis = lis2mdl.LIS2MDL(i2c)
 while True:
     mag_x, mag_y, mag_z = lis.magnetic
     print(f"X:{mag_x:.2f}, Y:{mag_y:.2f}, Z:{mag_z:.2f} uT")
-    print("")
+    print()
     time.sleep(1)

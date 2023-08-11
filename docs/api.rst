@@ -1,4 +1,4 @@
-MicroPython LIS2MDL Library
+MicroPython LIS2MDL Driver
 =====================================================================
 
 
